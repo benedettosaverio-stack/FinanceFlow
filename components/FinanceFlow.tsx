@@ -106,8 +106,11 @@ function Nav({ page, setPage }: { page: Page; setPage: (p: Page) => void }) {
       background: 'var(--bg)', position: 'sticky', top: 0, zIndex: 100,
       backdropFilter: 'blur(12px)'
     }}>
-      <div style={{ fontFamily: 'var(--mono)', fontSize: '1.1rem', color: 'var(--accent)', letterSpacing: 2, fontWeight: 500 }}>
-        FINANCE<span style={{ color: 'var(--text2)' }}>FLOW</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+        <img src="/logo.svg" alt="FinanceFlow" style={{ width: 28, height: 28, borderRadius: 7 }} />
+        <span style={{ fontFamily: 'var(--mono)', fontSize: '1rem', color: 'var(--accent)', letterSpacing: 2, fontWeight: 500 }}>
+          FINANCE<span style={{ color: 'var(--text2)' }}>FLOW</span>
+        </span>
       </div>
       <div style={{ display: 'flex', gap: '0.25rem' }}>
         {(['quiz', 'dashboard', 'suivi'] as Page[]).map(p => (

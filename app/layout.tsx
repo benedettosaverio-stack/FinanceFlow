@@ -6,6 +6,13 @@ export const metadata: Metadata = {
   description: 'Ton assistant épargne & investissement personnel',
   manifest: '/manifest.json',
   themeColor: '#0a0a0f',
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32' },
+      { url: '/icon-192.png', sizes: '192x192' },
+    ],
+    apple: { url: '/icon-180.png', sizes: '180x180' },
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
@@ -24,7 +31,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <link rel="apple-touch-icon" href="/icon-180.png" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
       </head>
       <body>{children}</body>
     </html>
