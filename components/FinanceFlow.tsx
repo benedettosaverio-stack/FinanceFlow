@@ -135,19 +135,38 @@ function Nav({ page, setPage }: { page: Page; setPage: (p: Page) => void }) {
 
 // ─── QUIZ PAGE ────────────────────────────────────────────────────────────────
 function QuizPage({ onComplete }: { onComplete: (profile: Profile) => void }) {
-  const [step, setStep] = useState(0)
-  const [answers, setAnswers] = useState<number[]>([])
-  const [done, setDone] = useState(false)
-  const [profile, setProfile] = useState<Profile>('Équilibré')
+  const [step, setStep] = useState(() => {
+    if (typeof window === 'undefined') return 0
+    return parseInt(localStorage.getItem('ff_quiz_step') || '0')
+  })
+  const [answers, setAnswers] = useState<number[]>(() => {
+    if (typeof window === 'undefined') return []
+    const saved = localStorage.getItem('ff_quiz_answers')
+    return saved ? JSON.parse(saved) : []
+  })
+  const [done, setDone] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return !!localStorage.getItem('ff_profile')
+  })
+  const [profile, setProfile] = useState<Profile>(() => {
+    if (typeof window === 'undefined') return 'Équilibré'
+    return (localStorage.getItem('ff_profile') as Profile) || 'Équilibré'
+  })
 
   const select = (idx: number) => {
     const next = [...answers]
     next[step] = idx
     setAnswers(next)
+    if (typeof window !== 'undefined') localStorage.setItem('ff_quiz_answers', JSON.stringify(next))
   }
 
   const next = () => {
-    if (step < QUESTIONS.length - 1) { setStep(s => s + 1); return }
+    if (step < QUESTIONS.length - 1) {
+      const newStep = step + 1
+      setStep(newStep)
+      if (typeof window !== 'undefined') localStorage.setItem('ff_quiz_step', String(newStep))
+      return
+    }
     const score = answers.reduce((s, a) => s + a, 0)
     const p = getProfile(score, QUESTIONS.length * 3)
     setProfile(p)
