@@ -285,18 +285,6 @@ function DashboardPage({ profile }: { profile: Profile }) {
           ))}
         </div>
 
-        <div style={{ ...S.card }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.85rem' }}>
-            <span style={{ ...S.mono, fontSize: '0.65rem', color: '#3388ff', background: '#3388ff15', border: '1px solid #3388ff30', padding: '0.2rem 0.6rem', borderRadius: 50, letterSpacing: 1 }}>IA · ANALYSE</span>
-            <span style={{ ...S.mono, fontSize: '0.65rem', color: '#5555aa' }}>profil {profile}</span>
-          </div>
-          <p style={{ ...S.mono, fontSize: '0.85rem', color: aiLoading || !aiText ? '#5555aa' : '#e8e8f0', lineHeight: 1.7 }}>
-            {aiText || 'Chargement...'}
-            {aiLoading && <span style={{ display: 'inline-block', width: 2, height: 13, background: '#00ff88', marginLeft: 2, verticalAlign: 'middle', animation: 'blink 0.8s infinite' }} />}
-          </p>
-          <style>{`@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}`}</style>
-        </div>
-
         <div style={{ ...S.card, padding: 0, overflow: 'hidden' }}>
           <div style={{ padding: '0.85rem 1rem', borderBottom: '1px solid #ffffff10', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ ...S.mono, fontSize: '0.7rem', letterSpacing: 2, textTransform: 'uppercase' as const }}>Actifs</span>
@@ -314,6 +302,18 @@ function DashboardPage({ profile }: { profile: Profile }) {
               </div>
             </div>
           ))}
+        </div>
+
+        <div style={{ ...S.card, minHeight: 80 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.85rem' }}>
+            <span style={{ ...S.mono, fontSize: '0.65rem', color: '#3388ff', background: '#3388ff15', border: '1px solid #3388ff30', padding: '0.2rem 0.6rem', borderRadius: 50, letterSpacing: 1 }}>IA · ANALYSE</span>
+            <span style={{ ...S.mono, fontSize: '0.65rem', color: '#5555aa' }}>profil {profile}</span>
+          </div>
+          <p style={{ ...S.mono, fontSize: '0.85rem', color: aiLoading || !aiText ? '#5555aa' : '#e8e8f0', lineHeight: 1.7 }}>
+            {aiText || 'Chargement...'}
+            {aiLoading && <span style={{ display: 'inline-block', width: 2, height: 13, background: '#00ff88', marginLeft: 2, verticalAlign: 'middle', animation: 'blink 0.8s infinite' }} />}
+          </p>
+          <style>{`@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}`}</style>
         </div>
       </div>
     </>
