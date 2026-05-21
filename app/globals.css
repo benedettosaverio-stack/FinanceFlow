@@ -15,19 +15,39 @@
   --text2: #8888aa;
   --mono: 'DM Mono', monospace;
   --sans: 'Syne', sans-serif;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-html, body {
+html {
+  height: -webkit-fill-available;
+}
+
+body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--sans);
   min-height: 100vh;
+  min-height: -webkit-fill-available;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  padding-bottom: var(--safe-bottom);
+}
+
+/* Nav safe area top */
+nav {
+  padding-top: calc(0.75rem + var(--safe-top)) !important;
 }
 
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
 
-button { cursor: pointer; }
+button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 input, select { font-family: var(--mono); }
+
+/* Prevent iOS zoom on input focus */
+input, select, textarea {
+  font-size: 16px !important;
+}
