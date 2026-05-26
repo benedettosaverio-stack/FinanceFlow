@@ -78,7 +78,7 @@ function getProfileDesc(profile: Profile) {
 }
 
 const S: Record<string, React.CSSProperties> = {
-  page: { minHeight: 'calc(100dvh - 120px)', overflowY: 'auto', padding: '1.25rem 1rem 2rem', WebkitOverflowScrolling: 'touch' },
+  page: { overflowY: 'auto', padding: '1.25rem 1rem', paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 90px)', WebkitOverflowScrolling: 'touch' },
   h1: { fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.25rem' },
   sub: { fontFamily: 'DM Mono, monospace', fontSize: '0.75rem', color: '#8888aa', marginBottom: '1.5rem' },
   card: { background: '#12121a', border: '1px solid #ffffff18', borderRadius: 16, padding: '1.25rem', marginBottom: '1rem' },
