@@ -324,6 +324,8 @@ function SuiviPage() {
   const [placements, setPlacements] = useState<Placement[]>([])
   const [form, setForm] = useState({ name: '', type: 'Livret réglementé', invested: '', current: '' })
   const [adding, setAdding] = useState(false)
+  const [editingIdx, setEditingIdx] = useState<number | null>(null)
+  const [editValue, setEditValue] = useState('')
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -345,6 +347,21 @@ function SuiviPage() {
   }
 
   const del = (i: number) => save(placements.filter((_, idx) => idx !== i))
+
+  const startEdit = (i: number) => {
+    setEditingIdx(i)
+    setEditValue(String(placements[i].current))
+  }
+
+  const confirmEdit = () => {
+    if (editingIdx === null) return
+    const val = parseFloat(editValue)
+    if (isNaN(val)) return
+    const updated = placements.map((p, i) => i === editingIdx ? { ...p, current: val } : p)
+    save(updated)
+    setEditingIdx(null)
+    setEditValue('')
+  }
 
   const total = placements.reduce((s, p) => s + p.current, 0)
   const invested = placements.reduce((s, p) => s + p.invested, 0)
@@ -401,16 +418,33 @@ function SuiviPage() {
               const g = p.current - p.invested
               const pct = ((g / p.invested) * 100).toFixed(2)
               return (
-                <div key={i} style={{ ...S.card, marginBottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem' }}>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontWeight: 600, fontSize: '0.95rem', marginBottom: '0.15rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</div>
-                    <div style={{ ...S.mono, fontSize: '0.65rem', color: '#5555aa', letterSpacing: 1 }}>{p.type.toUpperCase()}</div>
+                <div key={i} style={{ ...S.card, marginBottom: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem' }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 600, fontSize: '0.95rem', marginBottom: '0.15rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</div>
+                      <div style={{ ...S.mono, fontSize: '0.65rem', color: '#5555aa', letterSpacing: 1 }}>{p.type.toUpperCase()}</div>
+                    </div>
+                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                      <div style={{ ...S.mono, fontSize: '0.95rem', fontWeight: 500 }}>{p.current.toLocaleString('fr-FR')} €</div>
+                      <div style={{ ...S.mono, fontSize: '0.75rem', color: g >= 0 ? '#00ff88' : '#ff3366' }}>{g >= 0 ? '+' : ''}{pct}%</div>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', flexShrink: 0 }}>
+                      <button onClick={() => startEdit(i)} style={{ background: 'none', border: '1px solid #3388ff40', color: '#3388ff', fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: 8, cursor: 'pointer' }}>✎</button>
+                      <button onClick={() => del(i)} style={{ background: 'none', border: '1px solid #ffffff15', color: '#5555aa', fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: 8, cursor: 'pointer' }}>✕</button>
+                    </div>
                   </div>
-                  <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                    <div style={{ ...S.mono, fontSize: '0.95rem', fontWeight: 500 }}>{p.current.toLocaleString('fr-FR')} €</div>
-                    <div style={{ ...S.mono, fontSize: '0.75rem', color: g >= 0 ? '#00ff88' : '#ff3366' }}>{g >= 0 ? '+' : ''}{pct}%</div>
-                  </div>
-                  <button onClick={() => del(i)} style={{ background: 'none', border: '1px solid #ffffff15', color: '#5555aa', fontSize: '0.8rem', padding: '0.4rem 0.6rem', borderRadius: 8, cursor: 'pointer', flexShrink: 0 }}>✕</button>
+                  {editingIdx === i && (
+                    <div style={{ marginTop: '0.85rem', paddingTop: '0.85rem', borderTop: '1px solid #ffffff10', display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
+                      <div style={{ flex: 1 }}>
+                        <label style={S.label}>Nouvelle valeur actuelle (€)</label>
+                        <input style={{ ...S.input }} type="number" inputMode="decimal" value={editValue} onChange={e => setEditValue(e.target.value)} autoFocus />
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', paddingTop: '1.1rem' }}>
+                        <button onClick={confirmEdit} style={{ background: '#00ff88', color: '#000', border: 'none', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '0.8rem', padding: '0.5rem 0.85rem', borderRadius: 8, cursor: 'pointer' }}>OK</button>
+                        <button onClick={() => setEditingIdx(null)} style={{ background: 'none', border: '1px solid #ffffff15', color: '#5555aa', fontFamily: 'Syne, sans-serif', fontSize: '0.8rem', padding: '0.5rem 0.85rem', borderRadius: 8, cursor: 'pointer' }}>✕</button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )
             })}
